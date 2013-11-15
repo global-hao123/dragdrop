@@ -56,6 +56,7 @@ Drap.prototype = {
 						position_top = position.top,
 						position_left = position.left;
 
+					event.preventDefault();
 					that.status = 1;
 					that.startpositon = {x:event.pageX,y:event.pageY};
 					that.diff = {x:that.startpositon.x-position_left,y:that.startpositon.y-position_top};
