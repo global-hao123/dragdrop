@@ -56,6 +56,7 @@ Drap.prototype = {
 						position_top = position.top,
 						position_left = position.left;
 
+					//阻止选中
 					event.preventDefault();
 					that.status = 1;
 					that.startpositon = {x:event.pageX,y:event.pageY};
