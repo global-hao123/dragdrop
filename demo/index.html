@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{ margin: 0; padding: 0;}
+    body,html{ height: 100%;}
+    .bar-x{ height: 100px; background: #eee;}
+    .bar-y{ width: 100px; height: 100%; background: #eee;}
+    .handle{
+        position: absolute;
+        width: 100px; height: 100px;
+        background: #f00; color: #fff;
+    }
+    .handle-xy{ top: 150px; left: 150px;}
+    </style>
+</head>
+<body>
+    <div class="bar-x">
+        <div class="handle" id="handle-x">
+            <- X ->
+        </div>
+    </div>
+
+    <div class="bar-y">
+        <div class="handle" id="handle-y">
+            <- Y ->
+        </div>
+    </div>
+
+    <div class="handle handle-xy" id="handle">
+        drag me
+    </div>
+</body>
+
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="../src/drap.js"></script>
+<script>
+new Drap({
+    id:"handle",
+    circlimit:false
+}).enable();
+
+new Drap({
+    id:"handle-x",
+    circlimit:false,
+    direct:"x"
+}).enable();
+
+new Drap({
+    id:"handle-y",
+    circlimit:false,
+    direct:"y"
+}).enable();
+</script>
+</html>

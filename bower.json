@@ -1,0 +1,15 @@
+{
+  "name": "dragdrop",
+  "version": "1.0.1",
+  "authors": [
+    "wangwei33 <wangwei33@baidu.com>"
+  ],
+  "description": "A drap plugin for jQuery.",
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "http://gitlab.pro/common-ui/dragdrop",
+  "ignore": [
+    "**/*",
+    "!src/**"
+  ]
+}
