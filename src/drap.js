@@ -37,7 +37,9 @@ Drap.prototype = {
 	//启用
 	enable:function(){
 		var that = this;
-		that.opts.obj = $("#" + that.opts.id);
+		
+		// support DOM Object
+		that.opts.obj = that.opts.id === that.opts.id + "" ? $("#" + that.opts.id) : $(that.opts.id);
 		$(document).on("mousedown." + that.eventNamespace + " mousemove." + that.eventNamespace + " mouseup."+ that.eventNamespace,function(e){that.handleEvent(e)});
 	},
 	//禁用
@@ -120,4 +122,3 @@ Drap.prototype = {
 		}
 	}
 };
-
