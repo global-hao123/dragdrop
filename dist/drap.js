@@ -12,7 +12,7 @@ var Drap = function(t) {
 Drap.prototype = {
     enable: function() {
         var t = this;
-        t.opts.obj = $("#" + t.opts.id), $(document).on("mousedown." + t.eventNamespace + " mousemove." + t.eventNamespace + " mouseup." + t.eventNamespace, function(e) {
+        t.opts.obj = $(t.opts.id === t.opts.id + "" ? "#" + t.opts.id : t.opts.id), $(document).on("mousedown." + t.eventNamespace + " mousemove." + t.eventNamespace + " mouseup." + t.eventNamespace, function(e) {
             t.handleEvent(e);
         });
     },
