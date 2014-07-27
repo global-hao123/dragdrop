@@ -15,37 +15,48 @@
     })
     d.enable();
 */
-;;var Drap = function(opts){
+var uid = 0;
+
+var Drap = function(opts,elem){
 	var that = this;
-	
+
 	that.opts = $.extend({
-		"id":"drapBox",
 		"direct":"xy",//移动方向
 		"move":that.move,
 		"moveCallback":null,
+		"dragStartCallback":null,
+		"dropCallback":null,
 		"circlimit":true //是否限制在父区域移动
 	},opts);
 
 	that.top = 0;
 	that.left = 0;
 	that.status = 0;
+	uid++;
+
 	//事件命名空间。
-	that.eventNamespace = that.opts.id;
+	that.eventNamespace = "drag_" + uid;
+	that.obj = elem;
 };
 
 Drap.prototype = {
 	//启用
 	enable:function(){
 		var that = this;
-		
-		// support DOM Object
-		that.opts.obj = that.opts.id === that.opts.id + "" ? $("#" + that.opts.id) : $(that.opts.id);
-		$(document).on("mousedown." + that.eventNamespace + " mousemove." + that.eventNamespace + " mouseup."+ that.eventNamespace,function(e){that.handleEvent(e)});
+
+		that.obj.on("mousedown." + that.eventNamespace,function(e){that.handleEvent(e)});
+		$(document).on("mousemove." + that.eventNamespace + " mouseup."+ that.eventNamespace,function(e){that.handleEvent(e)});
 	},
 	//禁用
 	unable:function(){
 		var that = this;
-		$(document).off("mousedown." + that.eventNamespace + " mousemove." + that.eventNamespace + " mouseup."+ that.eventNamespace);
+		that.obj.off("mousedown."+ that.eventNamespace);
+		$(document).off("mousemove." + that.eventNamespace + " mouseup."+ that.eventNamespace);
+	},
+	// 显式触发mouseup，阻止当前的拖拽
+	interrupt:function(){
+		var that = this;
+		$(document).trigger("mouseup."+ that.eventNamespace);
 	},
 	handleEvent:function(event){
 		var that = this,
@@ -53,17 +64,16 @@ Drap.prototype = {
 			opts = that.opts;
 		switch(event.type){
 			case "mousedown":
-				if(ele.id === opts.id){
-					var position = that.opts.obj.position();
-						position_top = position.top,
-						position_left = position.left;
+				var position = that.obj.position();
+					position_top = position.top,
+					position_left = position.left;
 
-					//阻止选中
-					event.preventDefault();
-					that.status = 1;
-					that.startpositon = {x:event.pageX,y:event.pageY};
-					that.diff = {x:that.startpositon.x-position_left,y:that.startpositon.y-position_top};
-				}
+				//阻止选中
+				event.preventDefault();
+				that.status = 1;
+				that.startpositon = {x:event.pageX,y:event.pageY};
+				that.diff = {x:that.startpositon.x-position_left,y:that.startpositon.y-position_top};
+				opts.dragStartCallback && opts.dragStartCallback.apply(that, [event]);
 				break;
 			case "mousemove":
 				if(that.status === 1)
@@ -71,54 +81,64 @@ Drap.prototype = {
 					that.endposition = {x:event.pageX,y:event.pageY};
 					that.left = that.endposition.x - that.diff.x;
 					that.top = that.endposition.y - that.diff.y;
-					that.move();
+					that.move(event);
 				}
+				event.preventDefault();
 				break;
 			case "mouseup":
-				that.status = 0;
+				if(that.status === 1)
+				{
+					that.status = 0;
+					opts.dropCallback && opts.dropCallback.apply(that, [event]);
+				}
 				break;
 			default:break;
 		}
 	},
 	//修正y方向的高度
 	fixTop:function(){
-		var that = this,	
+		var that = this,
 			opts = that.opts,
-			$pobk = $(document.getElementById(opts.id).offsetParent),
-			height = $pobk.height()-opts.obj.outerHeight();
+			$pobk =  that.obj.offsetParent(),
+			height = $pobk.height()-that.obj.outerHeight();
 
 			return that.top < 0?0:(that.top > height?height:that.top);
 	},
 	//修正x方向的高度
 	fixLeft:function(){
-		var that = this,	
+		var that = this,
 			opts = that.opts,
-			$pobk = $(document.getElementById(opts.id).offsetParent),
-			width = $pobk.width()-opts.obj.outerWidth();
+			$pobk = that.obj.offsetParent(),
+			width = $pobk.width()-that.obj.outerWidth();
 
 			return that.left < 0?0:(that.left > width?width:that.left);
 	},
 	//移动方法
-	move:function(){
-		var that = this,	
+	move:function(event){
+		var that = this,
 			opts = that.opts;
 		if(opts.circlimit){
 			that.top = that.fixTop();
 			that.left = that.fixLeft();
 		}
 		if(opts.direct === "xy"){
-			opts.obj.css({"top":that.top + "px","left":that.left + "px"});
+			that.obj.css({"top":that.top + "px","left":that.left + "px"});
 		}
 		if(opts.direct === "x"){
-			opts.obj.css({"left":that.left + "px"});
+			that.obj.css({"left":that.left + "px"});
 		}
 		if(opts.direct === "y"){
-			opts.obj.css({"top":that.top + "px"});
+			that.obj.css({"top":that.top + "px"});
 		}
-
-		if(opts.moveCallback)
-		{
-			opts.moveCallback.apply(that);
-		}
+		opts.moveCallback && opts.moveCallback.apply(that, [event]);
 	}
+};
+
+$.fn.drag = function (opts) {
+    return this.each(function () {
+    	var dragbox = new Drap(opts,$(this));
+        $(this).data("data-drag-obj",dragbox);
+        dragbox.enable();
+
+    });
 };

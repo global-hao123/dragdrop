@@ -35,23 +35,22 @@
 </body>
 
 <script src="js/jquery-1.8.3.min.js"></script>
-<script src="../dist/drap.min.js"></script>
+<script src="../src/drap.js"></script>
 <script>
-new Drap({
-    id:"handle",
+    
+$("#handle").drag({
     circlimit:false
-}).enable();
-
-new Drap({
-    id:"handle-x",
+});
+    
+$("#handle-x").drag({
     circlimit:false,
     direct:"x"
-}).enable();
-
-new Drap({
-    id:"handle-y",
+});
+    
+$("#handle-y").drag({
     circlimit:false,
     direct:"y"
-}).enable();
+});
+
 </script>
 </html>

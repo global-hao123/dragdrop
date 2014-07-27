@@ -21,18 +21,22 @@ http://view.gitlab.pro/common-ui/dragdrop
 ## Usage
 
 ```javascript
-new Drap({
-    id:"handle"
-}).enable();
+$("#handle").drag({
+    ...
+});
+var dragObj = $("#handle").data("data-drag-obj");
+dragObj.unable();
 ```
 
 ## Parameter
 
 |name  |  default | description |
 | ------------- |:-----:| -----:|
-| id| "drapBox"|元素id|
 | direct| "xy"|移动方向|
 | circlimit| true|是否限制在父区域移动|
+| moveCallback| null|移动时的回调|
+| dragStartCallback| null|拖拽开始时的回调|
+| dropCallback| null|松开时的回调|
 
 ## Api
 
