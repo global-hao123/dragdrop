@@ -16,7 +16,7 @@ A drap plugin for jQuery.
 
 ## Demo
 
-http://view.gitlab.pro/common-ui/dragdrop
+http://global-hao123.github.io/dragdrop/
 
 ## Usage
 
