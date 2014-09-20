@@ -14,9 +14,6 @@ A drap plugin for jQuery.
 
 ## TODO
 
-## Demo
-
-http://global-hao123.github.io/dragdrop/
 
 ## Usage
 
@@ -56,7 +53,7 @@ dragObj.unable();
 
 ## License
 
-Copyright (c) 2012 Boaz Sender  
+Copyright (c) 2012 Boaz Sender
 Licensed under the MIT, GPL licenses.
 http://code.bocoup.com/license/
 
